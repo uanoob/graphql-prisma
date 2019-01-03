@@ -33,6 +33,27 @@ const Mutation = {
     db.comments = db.comments.filter(comment => comment.author !== args.id);
     return deletedUsers[0];
   },
+  updateUser(parent, args, { db }) {
+    const { id, data } = args;
+    const user = db.users.find(item => item.id === id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    if (typeof data.email === 'string') {
+      const emailTaken = db.users.some(item => item.email === data.email);
+      if (emailTaken) {
+        throw new Error('Email already exist');
+      }
+      user.email = data.email;
+    }
+    if (typeof data.name === 'string') {
+      user.name = data.name;
+    }
+    if (typeof data.age !== 'undefined') {
+      user.age = data.age;
+    }
+    return user;
+  },
   createPost(parent, args, { db }) {
     const {
       title, body, published, author,
@@ -60,6 +81,23 @@ const Mutation = {
     db.comments = db.comments.filter(comment => comment.post !== args.id);
     return deletedPosts[0];
   },
+  updatePost(parent, args, { db }, info) {
+    const { id, data } = args;
+    const post = db.posts.find(item => item.id === id);
+    if (!post) {
+      throw new Error('Post not found');
+    }
+    if (typeof data.title === 'string') {
+      post.title = data.title;
+    }
+    if (typeof data.body === 'string') {
+      post.body = data.body;
+    }
+    if (typeof data.published === 'boolean') {
+      post.published = data.published;
+    }
+    return post;
+  },
   createComment(parent, args, { db }) {
     const { text, author, post } = args.data;
     const userExist = db.users.some(user => user.id === author);
@@ -86,6 +124,17 @@ const Mutation = {
     }
     const deletedComments = db.comments.splice(commentIndex, 1);
     return deletedComments[0];
+  },
+  updateComment(parent, args, { db }, info) {
+    const { id, data } = args;
+    const comment = db.comments.find(item => item.id === id);
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+    if (typeof data.text === 'string') {
+      comment.text = data.text;
+    }
+    return comment;
   },
 };
 
