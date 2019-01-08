@@ -2,7 +2,7 @@ const typeDefs = `
   type Query {
     users(query: String): [User!]!
     posts(query: String): [Post!]!
-    comments: [Comment!]!
+    comments(query: String): [Comment!]!
     me: User!
     post: Post!
   },
@@ -24,12 +24,10 @@ const typeDefs = `
   input CreateUserInput {
     name: String!
     email: String!
-    age: Int
   },
   input UpdateUserInput {
     name: String
     email: String
-    age: Int
   },
   input CreatePostInput {
     title: String!
@@ -54,7 +52,7 @@ const typeDefs = `
     id: ID!
     name: String!
     email: String!
-    age: Int
+    password: String!
     posts: [Post!]!
     comments: [Comment!]
   },
@@ -79,11 +77,11 @@ const typeDefs = `
   }
   type PostSubscriptionPayload {
     mutation: MutationType!
-    data: Post!
+    node: Post
   }
   type CommentSubscriptionPayload {
     mutation: MutationType!
-    data: Comment!
+    node: Comment
   }
 `;
 
