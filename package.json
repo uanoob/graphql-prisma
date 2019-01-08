@@ -6,7 +6,8 @@
   "author": "I am",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.js --ext js,graphql --exec babel-node"
+    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "get-schema": "graphql get-schema -p database"
   },
   "private": true,
   "dependencies": {
