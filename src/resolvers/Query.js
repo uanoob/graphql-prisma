@@ -1,3 +1,5 @@
+import getUserId from '../utils/getUserId';
+
 const Query = {
   users(parent, args, { prisma }, info) {
     const operationArgs = {};
@@ -16,18 +18,20 @@ const Query = {
     return prisma.query.users(operationArgs, info);
   },
   posts(parent, args, { prisma }, info) {
-    const operationArgs = {};
+    const operationArgs = {
+      where: {
+        published: true,
+      },
+    };
     if (args.query) {
-      operationArgs.where = {
-        OR: [
-          {
-            title_contains: args.query,
-          },
-          {
-            body_contains: args.query,
-          },
-        ],
-      };
+      operationArgs.where.OR = [
+        {
+          title_contains: args.query,
+        },
+        {
+          body_contains: args.query,
+        },
+      ];
     }
     return prisma.query.posts(operationArgs, info);
   },
@@ -40,20 +44,60 @@ const Query = {
     }
     return prisma.query.comments(operationArgs, info);
   },
-  me() {
-    return {
-      id: '123456',
-      name: 'Angie',
-      email: 'angie@icloud.com',
-    };
+  me(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    return prisma.query.user(
+      {
+        where: {
+          id: userId,
+        },
+      },
+      info,
+    );
   },
-  post() {
-    return {
-      id: '4567321',
-      title: 'GraphQl',
-      body: '',
-      published: false,
+  myPosts(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const operationArgs = {
+      where: {
+        author: {
+          id: userId,
+        },
+      },
     };
+    if (args.query) {
+      operationArgs.where.OR = [
+        {
+          title_contains: args.query,
+        },
+        {
+          body_contains: args.query,
+        },
+      ];
+    }
+    return prisma.query.posts(operationArgs, info);
+  },
+  async post(parent, args, { prisma, request }, info) {
+    const userId = getUserId(request, false);
+    const posts = await prisma.query.posts(
+      {
+        where: {
+          id: args.id,
+          OR: [
+            { published: true },
+            {
+              author: {
+                id: userId,
+              },
+            },
+          ],
+        },
+      },
+      info,
+    );
+    if (posts.length === 0) {
+      throw new Error('Post not found');
+    }
+    return posts[0];
   },
 };
 
