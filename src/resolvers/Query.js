@@ -9,9 +9,6 @@ const Query = {
           {
             name_contains: args.query,
           },
-          {
-            email_contains: args.query,
-          },
         ],
       };
     }
