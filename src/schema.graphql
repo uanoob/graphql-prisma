@@ -21,6 +21,7 @@ const typeDefs = `
   },
   type Subscription {
     post: PostSubscriptionPayload!
+    myPost: PostSubscriptionPayload!
     comment(postId: ID!): CommentSubscriptionPayload!
   },
   type AuthPayload {
@@ -60,7 +61,7 @@ const typeDefs = `
   type User {
     id: ID!
     name: String!
-    email: String!
+    email: String
     password: String!
     posts: [Post!]!
     comments: [Comment!]
