@@ -2,7 +2,11 @@ import getUserId from '../utils/getUserId.utils';
 
 const Query = {
   users(parent, args, { prisma }, info) {
-    const operationArgs = {};
+    const operationArgs = {
+      first: args.first,
+      skip: args.skip,
+      after: args.after,
+    };
     if (args.query) {
       operationArgs.where = {
         OR: [
@@ -19,6 +23,9 @@ const Query = {
       where: {
         published: true,
       },
+      first: args.first,
+      skip: args.skip,
+      after: args.after,
     };
     if (args.query) {
       operationArgs.where.OR = [
@@ -33,7 +40,11 @@ const Query = {
     return prisma.query.posts(operationArgs, info);
   },
   comments(parent, args, { prisma }, info) {
-    const operationArgs = {};
+    const operationArgs = {
+      first: args.first,
+      skip: args.skip,
+      after: args.after,
+    };
     if (args.query) {
       operationArgs.where = {
         text_contains: args.query,
@@ -60,6 +71,9 @@ const Query = {
           id: userId,
         },
       },
+      first: args.first,
+      skip: args.skip,
+      after: args.after,
     };
     if (args.query) {
       operationArgs.where.OR = [
