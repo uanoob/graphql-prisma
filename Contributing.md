@@ -1,0 +1,1 @@
+Deploy to local development: prisma deploy -e ../config/dev.env
