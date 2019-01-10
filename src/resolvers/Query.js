@@ -6,6 +6,7 @@ const Query = {
       first: args.first,
       skip: args.skip,
       after: args.after,
+      orderBy: args.orderBy,
     };
     if (args.query) {
       operationArgs.where = {
@@ -26,6 +27,7 @@ const Query = {
       first: args.first,
       skip: args.skip,
       after: args.after,
+      orderBy: args.orderBy,
     };
     if (args.query) {
       operationArgs.where.OR = [
@@ -44,6 +46,7 @@ const Query = {
       first: args.first,
       skip: args.skip,
       after: args.after,
+      orderBy: args.orderBy,
     };
     if (args.query) {
       operationArgs.where = {
@@ -74,6 +77,7 @@ const Query = {
       first: args.first,
       skip: args.skip,
       after: args.after,
+      orderBy: args.orderBy,
     };
     if (args.query) {
       operationArgs.where.OR = [
