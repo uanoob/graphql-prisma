@@ -3,7 +3,7 @@ import {
   getPosts, getMyPosts, createPost, updatePost, deletePost,
 } from './utils/operations';
 import getClient from './utils/getClient';
-import seedDatabase, { userOne, postOne, postTwo } from './utils/seedDatabase';
+import seedDatabase, { userOne, postOne } from './utils/seedDatabase';
 import prisma from '../src/prisma';
 
 const client = getClient();
@@ -14,8 +14,9 @@ test('Should expose published posts', async () => {
   const response = await client.query({
     query: getPosts,
   });
-  expect(response.data.posts.length).toBe(1);
+  expect(response.data.posts.length).toBe(2);
   expect(response.data.posts[0].published).toBe(true);
+  expect(response.data.posts[1].published).toBe(true);
 });
 test('Should fetch user posts', async () => {
   const clientWithAuth = getClient(userOne.jwt);
@@ -23,7 +24,7 @@ test('Should fetch user posts', async () => {
   const { data } = await clientWithAuth.query({
     query: getMyPosts,
   });
-  expect(data.myPosts.length).toBe(2);
+  expect(data.myPosts.length).toBe(1);
 });
 test('Should be able to update own post', async () => {
   const clientWithAuth = getClient(userOne.jwt);
@@ -61,14 +62,14 @@ test('Should be able to create new post', async () => {
 test('Should be able delete post', async () => {
   const clientWithAuth = getClient(userOne.jwt);
   const variables = {
-    id: postTwo.post.id,
+    id: postOne.post.id,
   };
   await clientWithAuth.mutate({
     mutation: deletePost,
     variables,
   });
-  const existPost = await prisma.exists.Post({
-    id: postTwo.post.id,
+  const exists = await prisma.exists.Post({
+    id: postOne.post.id,
   });
-  expect(existPost).toBe(false);
+  expect(exists).toBe(false);
 });
