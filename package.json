@@ -25,7 +25,7 @@
     "env-cmd": "^8.0.2",
     "graphql": "^14.0.2",
     "graphql-yoga": "^1.16.9",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "prisma-binding": "^2.2.14"
   },
   "devDependencies": {
